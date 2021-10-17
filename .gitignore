@@ -1,0 +1,37 @@
+# IntelliJ
+.idea/*
+*.iml
+*.ipr
+*.iws
+
+# OS X
+.DS_Store
+
+# Backup files
+**/*.orig
+
+# JVM crashes
+**/hs_err_pid*.log
+
+# NetBeans
+.nb-gradle/
+
+# Eclipse Core
+.project
+
+# JDT-specific
+.classpath
+
+# Gradle
+.settings
+gradlew*
+common/gradlew
+gradle
+.gradle
+
+# Build
+bin/
+**/build/**
+out
+version.txt
+**/velocity.log
