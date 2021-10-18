@@ -85,6 +85,8 @@ public class CommandCarController {
             if(error.isPresent()) return errorMessage("Missing/Invalid " + error.get(), HttpStatus.BAD_REQUEST);
             carService.update(request, id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch(JsonParseException e) {
+            return errorMessage("Missing/Invalid body", HttpStatus.BAD_REQUEST);
         } catch (CarNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch(Exception e) {

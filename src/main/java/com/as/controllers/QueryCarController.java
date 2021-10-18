@@ -1,7 +1,7 @@
 package com.as.controllers;
 
 import com.as.exceptions.CarNotFoundException;
-import com.as.services.CarServiceImpl;
+import com.as.services.CarService;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,19 +12,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/cars")
 @Slf4j
 public class QueryCarController {
-    private final CarServiceImpl carServiceImpl;
+    private final CarService carService;
     private final Gson GSON = new Gson();
 
     @Autowired
-    public QueryCarController(CarServiceImpl carServiceImpl) {
-        this.carServiceImpl = carServiceImpl;
+    public QueryCarController(CarService carService) {
+        this.carService = carService;
     }
 
     @RequestMapping(value = "",
@@ -32,7 +31,7 @@ public class QueryCarController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> retrieveCars(HttpServletRequest request) {
         try {
-            return ResponseEntity.ok(GSON.toJson(carServiceImpl.getAll()));
+            return ResponseEntity.ok(GSON.toJson(carService.getAll()));
         } catch (Exception e) {
             log.error("Exception during retrieveCars ", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -44,7 +43,7 @@ public class QueryCarController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> retrieveCar(HttpServletRequest request, @PathVariable("id") String id) {
         try {
-            return ResponseEntity.ok(GSON.toJson(carServiceImpl.get(id)));
+            return ResponseEntity.ok(GSON.toJson(carService.get(id)));
         } catch (CarNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (Exception e) {

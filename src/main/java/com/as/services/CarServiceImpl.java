@@ -10,9 +10,11 @@ import com.as.persistence.repo.CarRepository;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -75,7 +77,8 @@ public class CarServiceImpl implements CarService {
                 .withMake(car.getMake())
                 .withColour(car.getColour())
                 .withModel(Model.builder().withName(car.getModel())
-                        .withSoundsLike(GSON.fromJson(car.getSoundsLike(), new TypeToken<List<String>>() {}.getType())).build())
+                        .withSoundsLike(car.getSoundsLike().isEmpty() ? new ArrayList<>() :
+                                GSON.fromJson(car.getSoundsLike(), new TypeToken<List<String>>() {}.getType())).build())
                 .withYear(car.getYear()).build();
     }
 
@@ -85,6 +88,7 @@ public class CarServiceImpl implements CarService {
             words = enrichment.soundsSimilar(model);
         } catch (Exception e) {
             log.error("Data not enriched!", e);
+            return Strings.EMPTY;
         }
         List<Word> wordsList = GSON.fromJson(String.valueOf(words), new TypeToken<List<Word>>() {
         }.getType());
